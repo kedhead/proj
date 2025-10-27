@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import projectRoutes from "./routes/projects.js";
+import taskRoutes from "./routes/tasks.js";
 
 dotenv.config();
 
@@ -27,10 +28,7 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
-
-app.get("/api/tasks", (req, res) => {
-  res.json({ message: "Task routes coming soon" });
-});
+app.use("/api", taskRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
