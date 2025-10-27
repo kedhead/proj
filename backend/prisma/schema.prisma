@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownedProjects    Project[]           @relation("ProjectOwner")
+  projectAssignments ProjectAssignment[]
+  
+  @@map("users")
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  color       String   @default("#3b82f6")
+  ownerId     Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User                @relation("ProjectOwner", fields: [ownerId], references: [id])
+  tasks       Task[]
+  assignments ProjectAssignment[]
+  
+  @@map("projects")
+}
+
+model ProjectAssignment {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  userId    Int
+  role      String   @default("member") // owner, admin, member, viewer
+  createdAt DateTime @default(now())
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, userId])
+  @@map("project_assignments")
+}
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  projectId   Int
+  text        String
+  type        String    @default("task") // task, summary, milestone
+  start       DateTime
+  end         DateTime
+  duration    Int       // in days
+  progress    Float     @default(0)
+  color       String?
+  parent      Int?
+  order       Int       @default(0)
+  open        Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  dependencies TaskDependency[] @relation("TaskTarget")
+  dependents   TaskDependency[] @relation("TaskSource")
+  
+  @@map("tasks")
+}
+
+model TaskDependency {
+  id         Int      @id @default(autoincrement())
+  sourceId   Int
+  targetId   Int
+  type       String   @default("0") // 0: finish-to-start, 1: start-to-start, 2: finish-to-finish, 3: start-to-finish
+  createdAt  DateTime @default(now())
+
+  source     Task     @relation("TaskSource", fields: [sourceId], references: [id], onDelete: Cascade)
+  target     Task     @relation("TaskTarget", fields: [targetId], references: [id], onDelete: Cascade)
+  
+  @@unique([sourceId, targetId])
+  @@map("task_dependencies")
+}

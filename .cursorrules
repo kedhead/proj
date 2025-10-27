@@ -1,0 +1,73 @@
+# Project Management System - Development Rules
+
+## Project Overview
+Building a production-ready project management system using SVAR React Gantt (https://svar.dev/react/gantt/).
+
+**Production Environment:**
+- VPS Host: 107.173.91.179
+- Deployment: Docker setup
+- All development happens on production server
+- NO fake/mock data - real data only
+
+## Safety Protocol
+1. **NEVER make destructive changes without explicit user approval**
+2. **ALWAYS discuss potential system-damaging changes before implementation**
+3. **ALWAYS use tdd-guard hooks for test-driven development**
+4. **ALWAYS verify changes work before committing**
+
+## Core Features Requirements
+
+### Gantt Chart Functionality
+- SVAR React Gantt integration (https://svar.dev/react/gantt/)
+- Inline editing capabilities
+- Context menu editing
+- Color-coded timeline
+- Auto-adjusting dates based on dependencies
+- Full feature set from SVAR Gantt demos
+
+### User Management
+- User authentication/login system
+- User assignment to projects
+- Permission-based project access
+
+### Dashboard
+- Clean, professional UI
+- Project overview
+- Quick access to assigned projects
+- Project editing capabilities
+
+## Technical Stack
+- **Frontend:** Vite + React 19 + SVAR Gantt + Tailwind CSS + Zustand
+- **Backend:** Node.js + Express + Prisma ORM + JWT Auth
+- **Database:** PostgreSQL 16
+- **Deployment:** Docker containers
+- **Host:** VPS at 107.173.91.179
+- **Data:** Real data only, no mocks or placeholders
+
+## Development Workflow
+1. Plan each feature step-by-step with user approval
+2. Use tdd-guard for continuous testing
+3. Reference SVAR Gantt documentation and demos
+4. Test on production environment
+5. Iterative development with user feedback
+
+## Code Standards
+- Clean, maintainable code
+- Proper error handling
+- Security best practices for authentication
+- Responsive design for dashboard
+- Follow SVAR Gantt best practices from official demos
+
+## Documentation References
+- SVAR React Gantt: https://svar.dev/react/gantt/
+- Demos and examples to be referenced as needed
+- User will provide additional links during development
+
+## Decision Making
+- Consult user for architectural decisions
+- Confirm before making changes to:
+  - Database schema
+  - Authentication system
+  - Docker configuration
+  - Production environment settings
+  - Major refactoring
