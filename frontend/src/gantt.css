@@ -1,0 +1,71 @@
+/* Fix datepicker styling conflicts with Tailwind */
+.wx-datepicker {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  padding: 8px !important;
+  border-radius: 4px !important;
+}
+
+.wx-datepicker input {
+  background: white !important;
+  border: 1px solid #d1d5db !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+}
+
+.wx-datepicker-calendar {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.wx-datepicker-calendar-day {
+  background: white !important;
+  padding: 4px !important;
+}
+
+.wx-datepicker-calendar-day:hover {
+  background: #f3f4f6 !important;
+}
+
+/* Ensure Gantt bars are visible */
+.wx-task-bar {
+  height: 20px !important;
+  border-radius: 4px !important;
+}
+
+/* Fix editor dialog */
+.wx-editor {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+}
+
+.wx-editor input,
+.wx-editor select,
+.wx-editor textarea {
+  background: white !important;
+  border: 1px solid #d1d5db !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+}
+
+/* Toolbar styling */
+.wx-toolbar {
+  background: #f9fafb !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  padding: 8px !important;
+}
+
+.wx-toolbar button {
+  background: white !important;
+  border: 1px solid #d1d5db !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  margin-right: 4px !important;
+}
+
+.wx-toolbar button:hover {
+  background: #f3f4f6 !important;
+}

@@ -23,7 +23,8 @@ export default function Dashboard() {
     try {
       setLoading(true);
       setError("");
-      setProjects([...(data.owned || []), ...(data.assigned || [])])
+      const data = await projectsAPI.getAll(token);
+      setProjects([...(data.owned || []), ...(data.assigned || [])]);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -64,7 +65,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Navigation Bar */}
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -86,24 +86,21 @@ export default function Dashboard() {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header with Search and Create Button */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-3xl font-bold text-gray-900">My Projects</h2>
-            <button
-              onClick={() => {
-                setEditingProject(null);
-                setIsModalOpen(true);
-              }}
-              className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-6 py-3 rounded-md hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-md"
-            >
-              + New Project
-            </button>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">Your Projects</h2>
+          <button
+            onClick={() => {
+              setEditingProject(null);
+              setIsModalOpen(true);
+            }}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+          >
+            + New Project
+          </button>
+        </div>
 
-          {/* Search Bar */}
+        <div className="mb-6">
           <input
             type="text"
             placeholder="Search projects..."
@@ -113,23 +110,17 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+          <div className="bg-red-50 text-red-800 p-4 rounded-md mb-6">
             {error}
           </div>
         )}
 
-        {/* Loading State */}
-        {loading && (
+        {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-            <p className="mt-4 text-gray-600">Loading projects...</p>
+            <div className="text-xl text-gray-600">Loading projects...</div>
           </div>
-        )}
-
-        {/* Projects Grid */}
-        {!loading && filteredProjects.length > 0 && (
+        ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
               <ProjectCard
@@ -140,61 +131,49 @@ export default function Dashboard() {
                   setIsModalOpen(true);
                 }}
                 onDelete={handleDeleteProject}
-                onClick={(projectId) => {
-                  // TODO: Navigate to Gantt view
-                  alert(`Opening Gantt view for project ${projectId}`);
-                }}
               />
             ))}
           </div>
         )}
 
-        {/* Empty State */}
         {!loading && filteredProjects.length === 0 && !error && (
           <div className="text-center py-12">
             <svg
               className="mx-auto h-24 w-24 text-gray-400"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
             <h3 className="mt-4 text-lg font-medium text-gray-900">
-              {searchTerm ? "No projects found" : "No projects yet"}
+              No projects found
             </h3>
             <p className="mt-2 text-gray-500">
               {searchTerm
                 ? "Try a different search term"
                 : "Get started by creating your first project"}
             </p>
-            {!searchTerm && (
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="mt-4 bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
-              >
-                Create Project
-              </button>
-            )}
           </div>
         )}
-      </main>
+      </div>
 
-      {/* Create/Edit Modal */}
-      <CreateProjectModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingProject(null);
-        }}
-        onSubmit={editingProject ? handleUpdateProject : handleCreateProject}
-        initialData={editingProject}
-      />
+      {isModalOpen && (
+        <CreateProjectModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingProject(null);
+          }}
+          onSubmit={editingProject ? handleUpdateProject : handleCreateProject}
+          initialData={editingProject}
+        />
+      )}
     </div>
   );
 }

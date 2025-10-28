@@ -3,6 +3,7 @@ import useAuthStore from "./store/authStore";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import GanttView from "./pages/GanttView";
 
 function ProtectedRoute({ children }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -20,6 +21,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/projects/:projectId/gantt"
+          element={
+            <ProtectedRoute>
+              <GanttView />
             </ProtectedRoute>
           }
         />
