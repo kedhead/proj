@@ -23,8 +23,7 @@ export default function Dashboard() {
     try {
       setLoading(true);
       setError("");
-      const data = await projectsAPI.getAll(token);
-      setProjects(data.projects || []);
+      setProjects([...(data.owned || []), ...(data.assigned || [])])
     } catch (err) {
       setError(err.message);
     } finally {

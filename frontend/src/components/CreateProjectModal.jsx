@@ -8,6 +8,7 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit, initialD
     endDate: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -26,9 +27,11 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit, initialD
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     if (!formData.name.trim()) {
       setError("Project name is required");
+      setLoading(false);
       return;
     }
 
@@ -36,7 +39,10 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit, initialD
       await onSubmit(formData);
       onClose();
     } catch (err) {
+      console.error("Error in onSubmit:", err);
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,7 +71,8 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit, initialD
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              required
+              placeholder="Enter project name"
+              disabled={loading}
             />
           </div>
 
@@ -80,6 +87,8 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit, initialD
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               rows="3"
+              placeholder="Enter project description"
+              disabled={loading}
             />
           </div>
 
@@ -94,6 +103,7 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit, initialD
                 setFormData({ ...formData, startDate: e.target.value })
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              disabled={loading}
             />
           </div>
 
@@ -108,20 +118,23 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit, initialD
                 setFormData({ ...formData, endDate: e.target.value })
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              disabled={loading}
             />
           </div>
 
           <div className="flex gap-3 mt-6">
             <button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-2 px-4 rounded-md hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              disabled={loading}
+              className="flex-1 bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-2 px-4 rounded-md hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {initialData ? "Update" : "Create"}
+              {loading ? "Saving..." : (initialData ? "Update" : "Create")}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              disabled={loading}
+              className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>

@@ -5,7 +5,7 @@ export const projectsAPI = {
     const response = await fetch(`${API_URL}/projects`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (\!response.ok) {
+    if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || "Failed to fetch projects");
     }
@@ -16,7 +16,7 @@ export const projectsAPI = {
     const response = await fetch(`${API_URL}/projects/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (\!response.ok) {
+    if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || "Failed to fetch project");
     }
@@ -32,7 +32,7 @@ export const projectsAPI = {
       },
       body: JSON.stringify(projectData),
     });
-    if (\!response.ok) {
+    if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || "Failed to create project");
     }
@@ -48,7 +48,7 @@ export const projectsAPI = {
       },
       body: JSON.stringify(projectData),
     });
-    if (\!response.ok) {
+    if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || "Failed to update project");
     }
@@ -60,7 +60,7 @@ export const projectsAPI = {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (\!response.ok) {
+    if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || "Failed to delete project");
     }
